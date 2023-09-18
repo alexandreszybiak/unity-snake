@@ -5,10 +5,13 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class Snake : MonoBehaviour
 {
+    const int MAX_CHANCES = 1;
+
     [SerializeField]
     Game gameManager;
 
@@ -21,6 +24,8 @@ public class Snake : MonoBehaviour
     private float moveInterval;
     private float lastMoveTime;
     private Vector2Int autoMoveDirection;
+
+    private int chancesLeft;
 
     private List<Vector2Int> parts;
     void Start()
@@ -41,6 +46,9 @@ public class Snake : MonoBehaviour
         moveInterval = .15f;
         lastMoveTime = Time.time;
         autoMoveDirection = Vector2Int.right;
+
+        //
+        chancesLeft = MAX_CHANCES;
     }
 
     // Update is called once per frame
@@ -48,7 +56,7 @@ public class Snake : MonoBehaviour
     {
         if(lastMoveTime + moveInterval < Time.time)
         {
-            Move(autoMoveDirection);
+            Move(autoMoveDirection, false);
         }
     }
 
@@ -57,15 +65,26 @@ public class Snake : MonoBehaviour
 
     }
 
-    void Move(Vector2Int moveDirection)
+    void Move(Vector2Int moveDirection, bool intentional)
     {
         Vector2Int targetPos = parts[0] + moveDirection;
         TileBase t = tilemap.GetTile(new Vector3Int(targetPos.x, targetPos.y, 0));
-        if (t == wallTile) return;
+        if (t == wallTile || t == snakeTile)
+        {
+            if(intentional) return;
 
-        if (t == foodTile) gameManager.GenerateFood();
+            if (chancesLeft == 0)
+            {
+                tilemap.color = Color.red;
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+            lastMoveTime = Time.time;
+            chancesLeft--;
+            return;
+        }
 
-        tilemap.SetTile(new Vector3Int(parts.Last().x, parts.Last().y), floorTile);        
+        tilemap.SetTile(new Vector3Int(parts.Last().x, parts.Last().y), floorTile);
+
         for (int i = parts.Count - 1; i > 0; i--)
         {
             parts[i] = parts[i - 1];
@@ -73,10 +92,20 @@ public class Snake : MonoBehaviour
         }
         parts[0] += moveDirection;
         tilemap.SetTile(new Vector3Int(parts[0].x, parts[0].y), snakeTile);
+
+        if (t == foodTile)
+        {
+            gameManager.GenerateFood();
+            parts.Add(new Vector2Int(parts.Last().x, parts.Last().y));
+            tilemap.SetTile(new Vector3Int(parts.Last().x, parts.Last().y), snakeTile);
+            moveInterval = Mathf.Clamp(moveInterval - .005f, .08f, .15f);
+        }
         //tilemap.RefreshAllTiles();
 
         lastMoveTime = Time.time;
         autoMoveDirection = moveDirection;
+
+        chancesLeft = MAX_CHANCES;
     }
 
     void OnMoveX(InputValue i)
@@ -87,7 +116,7 @@ public class Snake : MonoBehaviour
 
         if (autoMoveDirection.x != 0) return;
             
-        Move(Vector2Int.FloorToInt(new Vector2(val, 0)));
+        Move(Vector2Int.FloorToInt(new Vector2(val, 0)), true);
     }
 
     void OnMoveY(InputValue i)
@@ -98,6 +127,6 @@ public class Snake : MonoBehaviour
 
         if (autoMoveDirection.y != 0) return;
 
-        Move(Vector2Int.FloorToInt(new Vector2(0, val)));
+        Move(Vector2Int.FloorToInt(new Vector2(0, val)), true);
     }
 }
