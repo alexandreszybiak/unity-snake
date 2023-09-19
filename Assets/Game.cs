@@ -15,7 +15,7 @@ public class Game : MonoBehaviour
     [SerializeField]
     Snake snake; //USELESS?
 
-    private Vector2Int foodPosition;
+    public Vector2Int foodPosition;
     void Start()
     {
         foodPosition = new Vector2Int(Random.Range(-7, 6), Random.Range(-6, 7));

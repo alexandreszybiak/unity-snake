@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 362310676}
   - component: {fileID: 362310678}
   - component: {fileID: 362310677}
+  - component: {fileID: 362310679}
   m_Layer: 0
   m_Name: Tilemap
   m_TagString: Untagged
@@ -2459,7 +2460,7 @@ Tilemap:
       serializedVersion: 2
       m_TileIndex: 0
       m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
+      m_TileMatrixIndex: 1
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
@@ -2626,19 +2627,37 @@ Tilemap:
   - m_RefCount: 182
     m_Data: {fileID: -1775770559, guid: b1563b94f56f5194fa14e8d22997444b, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 240
+  - m_RefCount: 239
     m_Data:
-      e00: 1
-      e01: 0
+      e00: 0.9999998
+      e01: -0.00000037012813
       e02: 0
       e03: 0
-      e10: 0
-      e11: 1
+      e10: 0.00000037012813
+      e11: 0.9999998
       e12: 0
       e13: 0
       e20: 0
       e21: 0
       e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+  - m_RefCount: 1
+    m_Data:
+      e00: 1
+      e01: 0
+      e02: -0.00000008742278
+      e03: 0
+      e10: -0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: -0.00000008742278
+      e21: 0
+      e22: -1
       e23: 0
       e30: 0
       e31: 0
@@ -2671,6 +2690,24 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!114 &362310679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 362310675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f049ab660156d0f429ed21203bfb9d5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  snake: {fileID: 567568691}
+  gameManager: {fileID: 1946326531}
+  wallTile: {fileID: 11400000, guid: 9a3d2197f0b89f848a91847ffed51daf, type: 2}
+  floorTile: {fileID: 11400000, guid: 5c3c435bac5e7164ea88631e060d22d1, type: 2}
+  snakeTile: {fileID: 11400000, guid: cb30c167dfd30394ea142556bd3bef56, type: 2}
+  foodTile: {fileID: 11400000, guid: e84ecca5bcfa7c4468ddf96650c76daa, type: 2}
 --- !u!1 &414691468
 GameObject:
   m_ObjectHideFlags: 0
@@ -3131,6 +3168,7 @@ MonoBehaviour:
   floorTile: {fileID: 11400000, guid: 5c3c435bac5e7164ea88631e060d22d1, type: 2}
   snakeTile: {fileID: 11400000, guid: cb30c167dfd30394ea142556bd3bef56, type: 2}
   snake: {fileID: 567568691}
+  foodPosition: {x: 0, y: 0}
 --- !u!4 &1946326532
 Transform:
   m_ObjectHideFlags: 0
