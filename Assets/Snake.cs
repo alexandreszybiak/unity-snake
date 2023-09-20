@@ -19,7 +19,7 @@ public class Snake : MonoBehaviour
     Tilemap tilemap;
 
     [SerializeField] //Can it be replaced by a cleaner interface?
-    Tile wallTile, floorTile, snakeTile, foodTile, bodyTile, tailTile, cornerTile, headTile;
+    Tile wallTile, floorTile, foodTile, bodyTile, tailTile, cornerTile, headTile;
 
     private float moveInterval;
     private float lastMoveTime;
@@ -57,9 +57,35 @@ public class Snake : MonoBehaviour
 
     public void DrawInTilemap()
     {
+        
+        Vector2Int diffWithPrevious = Vector2Int.zero;
+        Vector2Int diffWithNext = Vector2Int.zero;
+        TileBase t = null;
         for (int i = 0; i < parts.Count; i++)
         {
-            tilemap.SetTile(new Vector3Int(parts[i].x, parts[i].y, 1), snakeTile);
+            float angle = 0;
+            t = bodyTile;
+            
+            if(i < parts.Count - 1) diffWithNext = parts[i] - parts[i + 1];
+            if (i > 0) diffWithPrevious = parts[i] - parts[i - 1];
+
+            if (i == 0)
+            {
+                t = headTile;
+                angle = Mathf.Atan2(diffWithNext.y, diffWithNext.x) * (180 / Mathf.PI);
+            }
+            if (i == parts.Count - 1)
+            {
+                t = tailTile;
+                angle = Mathf.Atan2(diffWithPrevious.y, diffWithPrevious.x) * (180 / Mathf.PI);
+                
+            }
+
+            Vector3Int cellCoord = new Vector3Int(parts[i].x, parts[i].y, 1);
+            tilemap.SetTile(cellCoord, t);
+
+            Matrix4x4 matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(0f, 0f, angle), Vector3.one);
+            tilemap.SetTransformMatrix(cellCoord, matrix);
         }
         
     }
