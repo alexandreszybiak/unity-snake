@@ -18,8 +18,8 @@ public class Snake : MonoBehaviour
     [SerializeField]
     Tilemap tilemap;
 
-    [SerializeField]
-    Tile wallTile, floorTile, snakeTile, foodTile;
+    [SerializeField] //Can it be replaced by a cleaner interface?
+    Tile wallTile, floorTile, snakeTile, foodTile, bodyTile, tailTile, cornerTile, headTile;
 
     private float moveInterval;
     private float lastMoveTime;
@@ -35,11 +35,6 @@ public class Snake : MonoBehaviour
         for(int i = 0; i < 5; i++)
         {
             parts.Add(new Vector2Int(-i, 0));
-        }
-
-        foreach(Vector2Int v in parts)
-        {
-            tilemap.SetTile(new Vector3Int(v.x, v.y, 0), snakeTile);
         }
 
         //Init movement
@@ -60,16 +55,23 @@ public class Snake : MonoBehaviour
         }
     }
 
-    void DrawInTilemap()
+    public void DrawInTilemap()
     {
-
+        for (int i = 0; i < parts.Count; i++)
+        {
+            tilemap.SetTile(new Vector3Int(parts[i].x, parts[i].y, 1), snakeTile);
+        }
+        
     }
 
     void Move(Vector2Int moveDirection, bool intentional)
     {
         Vector2Int targetPos = parts[0] + moveDirection;
-        TileBase t = tilemap.GetTile(new Vector3Int(targetPos.x, targetPos.y, 0));
-        if (t == wallTile || t == snakeTile)
+        bool collideWall = tilemap.GetTile(new Vector3Int(targetPos.x, targetPos.y, 0)) == wallTile;
+        bool collideSelf = parts.Contains(targetPos);
+        bool collideFood = tilemap.GetTile(new Vector3Int(targetPos.x, targetPos.y, 1)) == foodTile;
+
+        if (collideWall || collideSelf)
         {
             if(intentional) return;
 
@@ -83,24 +85,18 @@ public class Snake : MonoBehaviour
             return;
         }
 
-        tilemap.SetTile(new Vector3Int(parts.Last().x, parts.Last().y), floorTile);
-
         for (int i = parts.Count - 1; i > 0; i--)
         {
             parts[i] = parts[i - 1];
-            tilemap.SetTile(new Vector3Int(parts[i].x, parts[i].y), snakeTile);
         }
         parts[0] += moveDirection;
-        tilemap.SetTile(new Vector3Int(parts[0].x, parts[0].y), snakeTile);
 
-        if (t == foodTile)
+        if (collideFood)
         {
             gameManager.GenerateFood();
             parts.Add(new Vector2Int(parts.Last().x, parts.Last().y));
-            tilemap.SetTile(new Vector3Int(parts.Last().x, parts.Last().y), snakeTile);
             moveInterval = Mathf.Clamp(moveInterval - .005f, .08f, .15f);
         }
-        //tilemap.RefreshAllTiles();
 
         lastMoveTime = Time.time;
         autoMoveDirection = moveDirection;

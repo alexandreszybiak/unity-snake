@@ -15,17 +15,19 @@ public class Game : MonoBehaviour
     [SerializeField]
     Snake snake; //USELESS?
 
-    public Vector2Int foodPosition;
+    public Vector3Int foodPosition;
     void Start()
     {
-        foodPosition = new Vector2Int(Random.Range(-7, 6), Random.Range(-6, 7));
-        tilemap.SetTile(new Vector3Int(foodPosition.x, foodPosition.y, 0), foodTile);
+        foodPosition = Vector3Int.zero;
+        GenerateFood();
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-        
+        ClearLayer(1);
+        tilemap.SetTile(foodPosition, foodTile);
+        snake.DrawInTilemap();
     }
 
     public void GenerateFood()
@@ -35,19 +37,30 @@ public class Game : MonoBehaviour
         {
             for(int y = tilemap.cellBounds.min.y; y < tilemap.cellBounds.max.y; y++)
             {
-                Vector3Int coord = new Vector3Int(x, y, 0);
-                TileBase t = tilemap.GetTile(coord);
-                if (t == floorTile) freeTileCoordinates.Add(coord);
+                Vector3Int coord0 = new Vector3Int(x, y, 0);
+                Vector3Int coord1 = new Vector3Int(x, y, 1);
+                TileBase t0 = tilemap.GetTile(coord0);
+                TileBase t1 = tilemap.GetTile(coord1);
+                
+                if (t0 == floorTile && t1 == null) freeTileCoordinates.Add(coord1);
             }
         }
 
-        Vector3Int randomTileCoordinate = freeTileCoordinates[Random.Range(0, freeTileCoordinates.Count)];
-
-        tilemap.SetTile(randomTileCoordinate, foodTile);
+        foodPosition = freeTileCoordinates[Random.Range(0, freeTileCoordinates.Count)];        
     }
 
     void OnRegenerateFood()
     {
         GenerateFood();
+    }
+    void ClearLayer(int layer)
+    {
+        BoundsInt area = new BoundsInt(tilemap.cellBounds.min.x, tilemap.cellBounds.min.y, layer, tilemap.size.x, tilemap.size.y, 1);
+        TileBase[] tileArray = new TileBase[area.size.x * area.size.y];
+        for (int index = 0; index < tileArray.Length; index++)
+        {
+            tileArray[index] = null;
+        }
+        tilemap.SetTilesBlock(area, tileArray);
     }
 }

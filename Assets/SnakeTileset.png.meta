@@ -257,7 +257,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -278,7 +278,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -286,6 +286,27 @@ TextureImporter:
       bones: []
       spriteID: b72561c5669e7f9429f2d124a5db114a
       internalID: 1913508081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TestSprite
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b30b03068cf8065449134bcf2300cedd
+      internalID: -1376863903
       vertices: []
       indices: 
       edges: []
@@ -309,6 +330,7 @@ TextureImporter:
       SnakeHeadOpen: 1779163793
       SnakeTail: -433338207
       SnakeWall: 1929289125
+      TestSprite: -1376863903
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
