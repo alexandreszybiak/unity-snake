@@ -11,6 +11,9 @@ using UnityEngine.Tilemaps;
 public class Snake : MonoBehaviour
 {
     const int MAX_CHANCES = 1;
+    const float MIN_MOVE_INTERVAL = .1f;
+    const float INITIAL_MOVE_INTERVAL = .15f;
+    const float ACCELERATION_INCREMENT = .005f;
 
     [SerializeField]
     Game gameManager;
@@ -19,7 +22,7 @@ public class Snake : MonoBehaviour
     Tilemap tilemap;
 
     [SerializeField] //Can it be replaced by a cleaner interface?
-    Tile wallTile, floorTile, foodTile, bodyTile, tailTile, cornerTile, headTile;
+    Tile wallTile, floorTile, foodTile, bodyTile, tailTile, cornerTile, headOpenTile, headClosedTile;
 
     private float moveInterval;
     private float lastMoveTime;
@@ -27,10 +30,13 @@ public class Snake : MonoBehaviour
 
     private int chancesLeft;
 
+    private bool headOpen;
+
     private List<Vector2Int> parts;
     void Start()
     {
         //Init snake body
+        headOpen = false;
         parts = new List<Vector2Int>();
         for(int i = 0; i < 5; i++)
         {
@@ -38,7 +44,7 @@ public class Snake : MonoBehaviour
         }
 
         //Init movement
-        moveInterval = .15f;
+        moveInterval = INITIAL_MOVE_INTERVAL;
         lastMoveTime = Time.time;
         autoMoveDirection = Vector2Int.right;
 
@@ -71,14 +77,31 @@ public class Snake : MonoBehaviour
 
             if (i == 0)
             {
-                t = headTile;
+                t = headOpen ? headOpenTile : headClosedTile;
                 angle = Mathf.Atan2(diffWithNext.y, diffWithNext.x) * (180 / Mathf.PI);
             }
-            if (i == parts.Count - 1)
+            else if (i == parts.Count - 1)
             {
                 t = tailTile;
                 angle = Mathf.Atan2(diffWithPrevious.y, diffWithPrevious.x) * (180 / Mathf.PI);
                 
+            }
+            else
+            {
+                if(diffWithPrevious.x == diffWithNext.x)
+                {
+                    angle = 90;
+                }
+                else if(diffWithPrevious.y == diffWithNext.y)
+                {
+                    angle = 0;
+                }
+                else
+                {
+                    t = cornerTile;
+                    Vector2Int addedDiff = diffWithPrevious + diffWithNext;
+                    angle = Mathf.Atan2(addedDiff.y, addedDiff.x) * (180 / Mathf.PI) - 45.0f;
+                }
             }
 
             Vector3Int cellCoord = new Vector3Int(parts[i].x, parts[i].y, 1);
@@ -87,7 +110,7 @@ public class Snake : MonoBehaviour
             Matrix4x4 matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(0f, 0f, angle), Vector3.one);
             tilemap.SetTransformMatrix(cellCoord, matrix);
         }
-        
+        headOpen = !headOpen;
     }
 
     void Move(Vector2Int moveDirection, bool intentional)
@@ -121,13 +144,15 @@ public class Snake : MonoBehaviour
         {
             gameManager.GenerateFood();
             parts.Add(new Vector2Int(parts.Last().x, parts.Last().y));
-            moveInterval = Mathf.Clamp(moveInterval - .005f, .08f, .15f);
+            moveInterval = Mathf.Clamp(moveInterval - ACCELERATION_INCREMENT, MIN_MOVE_INTERVAL, INITIAL_MOVE_INTERVAL);
         }
 
         lastMoveTime = Time.time;
         autoMoveDirection = moveDirection;
 
         chancesLeft = MAX_CHANCES;
+
+        gameManager.UpdateTilemap();
     }
 
     void OnMoveX(InputValue i)

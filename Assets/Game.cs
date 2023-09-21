@@ -23,13 +23,13 @@ public class Game : MonoBehaviour
     }
 
     // Update is called once per frame
-    void LateUpdate()
+
+    public void UpdateTilemap()
     {
         ClearLayer(1);
         tilemap.SetTile(foodPosition, foodTile);
         snake.DrawInTilemap();
     }
-
     public void GenerateFood()
     {
         var freeTileCoordinates = new List<Vector3Int>();
