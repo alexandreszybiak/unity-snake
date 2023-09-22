@@ -27,37 +27,49 @@ public class Snake : MonoBehaviour
     private float moveInterval;
     private float lastMoveTime;
     private Vector2Int autoMoveDirection;
+    private bool moving;
 
     private int chancesLeft;
 
     private bool headOpen;
 
     private List<Vector2Int> parts;
-    void Start()
+
+    private void Awake()
     {
         //Init snake body
         headOpen = false;
         parts = new List<Vector2Int>();
-        for(int i = 0; i < 5; i++)
+        for (int i = 0; i > -3; i--)
         {
-            parts.Add(new Vector2Int(-i, 0));
+            parts.Add(new Vector2Int(i, -2));
         }
 
         //Init movement
         moveInterval = INITIAL_MOVE_INTERVAL;
         lastMoveTime = Time.time;
         autoMoveDirection = Vector2Int.right;
+        moving = false;
 
         //
         chancesLeft = MAX_CHANCES;
+    }
+    void Start()
+    {
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(lastMoveTime + moveInterval < Time.time)
+        if(moving && lastMoveTime + moveInterval < Time.time)
         {
             Move(autoMoveDirection, false);
+        }
+
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            gameManager.UpdateTilemap();
         }
     }
 
@@ -175,5 +187,11 @@ public class Snake : MonoBehaviour
         if (autoMoveDirection.y != 0) return;
 
         Move(Vector2Int.FloorToInt(new Vector2(0, val)), true);
+    }
+
+    void OnGiveFocusToGame()
+    {
+        Debug.Log("Click");
+        gameManager.UpdateTilemap();
     }
 }

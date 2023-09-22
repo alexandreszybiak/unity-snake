@@ -22,6 +22,15 @@
                     "processors": "",
                     "interactions": "Press",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "GiveFocusToGame",
+                    "type": "Button",
+                    "id": "20707247-6284-4531-87bc-2a98f7b28dcb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -156,6 +165,17 @@
                     "action": "MoveY",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "bf230155-ce52-4a16-9629-76c22a9c2257",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard;Gamepad",
+                    "action": "GiveFocusToGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

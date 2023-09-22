@@ -16,10 +16,14 @@ public class Game : MonoBehaviour
     Snake snake; //USELESS?
 
     public Vector3Int foodPosition;
+
+    private void Awake()
+    {
+        foodPosition = new Vector3Int(1, -2, 1);
+    }
     void Start()
     {
-        foodPosition = Vector3Int.zero;
-        GenerateFood();
+        //UpdateTilemap();
     }
 
     // Update is called once per frame
