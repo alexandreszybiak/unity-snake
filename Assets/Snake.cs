@@ -12,8 +12,8 @@ public class Snake : MonoBehaviour
 {
     const int MAX_CHANCES = 1;
     const float MIN_MOVE_INTERVAL = .1f;
-    const float INITIAL_MOVE_INTERVAL = .15f;
-    const float ACCELERATION_INCREMENT = .005f;
+    const float INITIAL_MOVE_INTERVAL = .15f; // .15f
+    const float ACCELERATION_INCREMENT = .015f; //.015f
 
     [SerializeField]
     Game gameManager;
@@ -28,6 +28,7 @@ public class Snake : MonoBehaviour
     private float lastMoveTime;
     private Vector2Int autoMoveDirection;
     private bool moving;
+    private Vector2Int savedLastIntentionalDirection;
 
     private int chancesLeft;
 
@@ -50,6 +51,7 @@ public class Snake : MonoBehaviour
         lastMoveTime = Time.time;
         autoMoveDirection = Vector2Int.right;
         moving = false;
+        savedLastIntentionalDirection = Vector2Int.zero;
 
         //
         chancesLeft = MAX_CHANCES;
@@ -120,8 +122,9 @@ public class Snake : MonoBehaviour
         headOpen = !headOpen;
     }
 
-    void Move(Vector2Int moveDirection, bool intentional)
+    void Move(Vector2Int wantedDirection, bool intentional, bool isSavedMove = false)
     {
+        Vector2Int moveDirection = wantedDirection;  
         Vector2Int targetPos = parts[0] + moveDirection;
         bool collideWall = tilemap.GetTile(new Vector3Int(targetPos.x, targetPos.y, 0)) == wallTile;
         bool collideSelf = parts.Contains(targetPos);
@@ -129,7 +132,16 @@ public class Snake : MonoBehaviour
 
         if (collideWall || collideSelf)
         {
-            if(intentional) return;
+            
+            if (intentional)
+            {
+                if (isSavedMove == false)
+                {
+                    Debug.Log("Saved move");
+                    savedLastIntentionalDirection = wantedDirection;
+                }
+                return;
+            }
 
             if (chancesLeft == 0)
             {
@@ -141,22 +153,35 @@ public class Snake : MonoBehaviour
             return;
         }
 
+        if (collideFood)
+        {
+            parts.Add(parts.Last());
+            moveInterval = Mathf.Clamp(moveInterval - ACCELERATION_INCREMENT, MIN_MOVE_INTERVAL, INITIAL_MOVE_INTERVAL);
+        }
+
         for (int i = parts.Count - 1; i > 0; i--)
         {
             parts[i] = parts[i - 1];
         }
         parts[0] += moveDirection;
 
-        if (collideFood)
-        {
-            gameManager.GenerateFood();
-            parts.Add(new Vector2Int(parts.Last().x, parts.Last().y));
-            moveInterval = Mathf.Clamp(moveInterval - ACCELERATION_INCREMENT, MIN_MOVE_INTERVAL, INITIAL_MOVE_INTERVAL);
-        }
-
-        lastMoveTime = Time.time;
+        //
         autoMoveDirection = moveDirection;
 
+        // Saved move
+        if (intentional) savedLastIntentionalDirection = Vector2Int.zero;
+        if (savedLastIntentionalDirection != Vector2Int.zero)
+        {
+            Move(savedLastIntentionalDirection, true, true);
+            savedLastIntentionalDirection = Vector2Int.zero;
+            Debug.Log("Execute saved move");
+        }
+
+        // Generate food after all snake movement is done
+        if (collideFood) gameManager.GenerateFood();
+
+        lastMoveTime = Time.time;
+        
         chancesLeft = MAX_CHANCES;
 
         gameManager.UpdateTilemap();

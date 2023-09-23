@@ -15,16 +15,10 @@ public class Game : MonoBehaviour
     [SerializeField]
     Snake snake; //USELESS?
 
-    [SerializeField]
-    GameObject title; //USELESS?
-
     public Vector3Int foodPosition;
-
-    private bool isTitle;
 
     private void Awake()
     {
-        isTitle = true;
         foodPosition = new Vector3Int(1, -2, 1);
     }
     void Start()
