@@ -15,18 +15,22 @@ public class Game : MonoBehaviour
     [SerializeField]
     Snake snake; //USELESS?
 
+    [SerializeField]
+    GameObject title; //USELESS?
+
     public Vector3Int foodPosition;
+
+    private bool isTitle;
 
     private void Awake()
     {
+        isTitle = true;
         foodPosition = new Vector3Int(1, -2, 1);
     }
     void Start()
     {
-        //UpdateTilemap();
+        UpdateTilemap();
     }
-
-    // Update is called once per frame
 
     public void UpdateTilemap()
     {
@@ -51,11 +55,6 @@ public class Game : MonoBehaviour
         }
 
         foodPosition = freeTileCoordinates[Random.Range(0, freeTileCoordinates.Count)];        
-    }
-
-    void OnRegenerateFood()
-    {
-        GenerateFood();
     }
     void ClearLayer(int layer)
     {

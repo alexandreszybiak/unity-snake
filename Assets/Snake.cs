@@ -66,11 +66,6 @@ public class Snake : MonoBehaviour
         {
             Move(autoMoveDirection, false);
         }
-
-        if (Mouse.current.leftButton.wasPressedThisFrame)
-        {
-            gameManager.UpdateTilemap();
-        }
     }
 
     public void DrawInTilemap()
@@ -139,7 +134,7 @@ public class Snake : MonoBehaviour
             if (chancesLeft == 0)
             {
                 tilemap.color = Color.red;
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                SceneManager.LoadScene("Title");
             }
             lastMoveTime = Time.time;
             chancesLeft--;
@@ -169,6 +164,8 @@ public class Snake : MonoBehaviour
 
     void OnMoveX(InputValue i)
     {
+        if (moving == false) moving = true;
+
         var val = i.Get<float>();
 
         if (val == 0) return;
@@ -180,6 +177,8 @@ public class Snake : MonoBehaviour
 
     void OnMoveY(InputValue i)
     {
+        if (moving == false) moving = true;
+
         var val = i.Get<float>();
 
         if (val == 0) return;
@@ -187,11 +186,5 @@ public class Snake : MonoBehaviour
         if (autoMoveDirection.y != 0) return;
 
         Move(Vector2Int.FloorToInt(new Vector2(0, val)), true);
-    }
-
-    void OnGiveFocusToGame()
-    {
-        Debug.Log("Click");
-        gameManager.UpdateTilemap();
     }
 }
