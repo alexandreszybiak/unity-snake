@@ -2088,6 +2088,7 @@ MonoBehaviour:
   - {fileID: -107721905, guid: 19e465612bda9904383aa1eedad47768, type: 3}
   - {fileID: -1043073040, guid: 19e465612bda9904383aa1eedad47768, type: 3}
   - {fileID: -106975008, guid: 19e465612bda9904383aa1eedad47768, type: 3}
+  snake: {fileID: 567568691}
 --- !u!1 &1907796129
 GameObject:
   m_ObjectHideFlags: 0

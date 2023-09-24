@@ -10,16 +10,24 @@ public class Game : MonoBehaviour
     Tilemap tilemap;
 
     [SerializeField]
-    Tile foodTile, floorTile, snakeTile;
+    private Tile foodTile, floorTile, snakeTile;
 
     [SerializeField]
-    Snake snake; //USELESS?
+    private Snake snake; //USELESS?
 
     public Vector3Int foodPosition;
 
     private void Awake()
     {
+        // Register to event
+        snake.AteFood += OnSnakeAteFood;
+        snake.ExecutedMove += OnSnakeExecutedMove;
         foodPosition = new Vector3Int(1, -2, 1);
+    }
+
+    private void OnDestroy()
+    {
+        snake.AteFood -= OnSnakeAteFood;
     }
     void Start()
     {
@@ -32,7 +40,7 @@ public class Game : MonoBehaviour
         tilemap.SetTile(foodPosition, foodTile);
         snake.DrawInTilemap();
     }
-    public void GenerateFood()
+    private void GenerateFood()
     {
         var freeTileCoordinates = new List<Vector3Int>();
         for(int x = tilemap.cellBounds.min.x; x < tilemap.cellBounds.max.x; x++)
@@ -50,7 +58,7 @@ public class Game : MonoBehaviour
 
         foodPosition = freeTileCoordinates[Random.Range(0, freeTileCoordinates.Count)];        
     }
-    void ClearLayer(int layer)
+    private void ClearLayer(int layer)
     {
         BoundsInt area = new BoundsInt(tilemap.cellBounds.min.x, tilemap.cellBounds.min.y, layer, tilemap.size.x, tilemap.size.y, 1);
         TileBase[] tileArray = new TileBase[area.size.x * area.size.y];
@@ -59,5 +67,15 @@ public class Game : MonoBehaviour
             tileArray[index] = null;
         }
         tilemap.SetTilesBlock(area, tileArray);
+    }
+
+    private void OnSnakeAteFood()
+    {
+        GenerateFood();
+    }
+
+    private void OnSnakeExecutedMove()
+    {
+        UpdateTilemap();
     }
 }

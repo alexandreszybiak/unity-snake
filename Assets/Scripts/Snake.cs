@@ -1,7 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -14,9 +14,6 @@ public class Snake : MonoBehaviour
     const float MIN_MOVE_INTERVAL = .1f;
     const float INITIAL_MOVE_INTERVAL = .15f; // .15f
     const float ACCELERATION_INCREMENT = .015f; //.015f
-
-    [SerializeField]
-    Game gameManager;
 
     [SerializeField]
     Tilemap tilemap;
@@ -35,6 +32,10 @@ public class Snake : MonoBehaviour
     private bool headOpen;
 
     private List<Vector2Int> parts;
+
+    // Events
+    public event Action AteFood;
+    public event Action ExecutedMove;
 
     private void Awake()
     {
@@ -177,14 +178,14 @@ public class Snake : MonoBehaviour
             Debug.Log("Execute saved move");
         }
 
-        // Generate food after all snake movement is done
-        if (collideFood) gameManager.GenerateFood();
+        // Send message that I ate food
+        if (collideFood) AteFood?.Invoke();
 
         lastMoveTime = Time.time;
         
         chancesLeft = MAX_CHANCES;
 
-        gameManager.UpdateTilemap();
+        if (isSavedMove == false) ExecutedMove?.Invoke();
     }
 
     void OnMoveX(InputValue i)

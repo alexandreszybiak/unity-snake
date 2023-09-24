@@ -1,24 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Threading;
 using UnityEditor.U2D;
 using UnityEngine;
 
 public class ScorePanel : MonoBehaviour
 {
     [SerializeField]
-    GameObject counterOnes, counterTens;
+    private GameObject counterOnes, counterTens;
 
     [SerializeField]
-    List<Sprite> numberFont;
+    private List<Sprite> numberFont;
+
+    [SerializeField]
+    private Snake snake;
+
+    private int count;
 
     private void Awake()
     {
-        
+        count = 0;
+
+        if(snake != null) snake.AteFood += OnSnakeAteFood;
+
+    }
+    private void OnDestroy()
+    {
+        if (snake != null) snake.AteFood -= OnSnakeAteFood;
     }
     void Start()
     {
-        SetScore(19);
+        SetScore(0);
     }
 
     // Update is called once per frame
@@ -27,9 +39,15 @@ public class ScorePanel : MonoBehaviour
         
     }
 
-    void SetScore(int value = 0)
+    private void SetScore(int value = 0)
     {
         counterTens.GetComponent<SpriteRenderer>().sprite = numberFont[value / 10];
         counterOnes.GetComponent<SpriteRenderer>().sprite = numberFont[value % 10];
+    }
+
+    private void OnSnakeAteFood()
+    {
+        count++;
+        SetScore(count);
     }
 }
