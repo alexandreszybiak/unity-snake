@@ -22,12 +22,22 @@ public class Game : MonoBehaviour
         // Register to event
         snake.AteFood += OnSnakeAteFood;
         snake.ExecutedMove += OnSnakeExecutedMove;
+        snake.Died += OnSnakeDied;
+        snake.FinishedGameOverSequence += OnSnakeFinishedGameOverSequence;
         foodPosition = new Vector3Int(1, -2, 1);
+    }
+
+    private void OnSnakeDied()
+    {
+        UpdateTilemap();
     }
 
     private void OnDestroy()
     {
         snake.AteFood -= OnSnakeAteFood;
+        snake.ExecutedMove -= OnSnakeExecutedMove;
+        snake.Died -= OnSnakeDied;
+        snake.FinishedGameOverSequence -= OnSnakeFinishedGameOverSequence;
     }
     void Start()
     {
@@ -75,6 +85,10 @@ public class Game : MonoBehaviour
     }
 
     private void OnSnakeExecutedMove()
+    {
+        UpdateTilemap();
+    }
+    private void OnSnakeFinishedGameOverSequence()
     {
         UpdateTilemap();
     }

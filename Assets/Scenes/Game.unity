@@ -1686,7 +1686,6 @@ GameObject:
   m_Component:
   - component: {fileID: 567568690}
   - component: {fileID: 567568691}
-  - component: {fileID: 567568692}
   - component: {fileID: 567568693}
   m_Layer: 0
   m_Name: Snake
@@ -1722,68 +1721,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a262bccea3e6c6948b4b71c745c9a4f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1946326531}
   tilemap: {fileID: 362310678}
   wallTile: {fileID: 11400000, guid: 9a3d2197f0b89f848a91847ffed51daf, type: 2}
   floorTile: {fileID: 11400000, guid: 5c3c435bac5e7164ea88631e060d22d1, type: 2}
   foodTile: {fileID: 11400000, guid: e84ecca5bcfa7c4468ddf96650c76daa, type: 2}
   bodyTile: {fileID: 11400000, guid: 0bb34275979fc4242b49bf6431f0c895, type: 2}
+  brokenBodyTile: {fileID: 11400000, guid: bef250553fac68942a3fca8a8f4eba57, type: 2}
   tailTile: {fileID: 11400000, guid: a2659d4255a34ac4fb1158b346cbf744, type: 2}
+  brokenTailTile: {fileID: 11400000, guid: 41d83d131f4bd5d4a8e8fe0c7915cbe0, type: 2}
   cornerTile: {fileID: 11400000, guid: 0acd684c63804b84cbde521be499990d, type: 2}
   headOpenTile: {fileID: 11400000, guid: cb30c167dfd30394ea142556bd3bef56, type: 2}
   headClosedTile: {fileID: 11400000, guid: e368006a22e6e4a44a835861f18741a4, type: 2}
---- !u!212 &567568692
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 567568688}
-  m_Enabled: 0
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 1
-  m_Sprite: {fileID: 1779163793, guid: b1563b94f56f5194fa14e8d22997444b, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  headHitWallTile: {fileID: 11400000, guid: 656d16a10c5f4c94390a3509a4bfab58, type: 2}
+  headKissClosedTile: {fileID: 11400000, guid: 5d9c229fda0565d4bb391afe584fb495, type: 2}
+  headKissOpenTile: {fileID: 11400000, guid: 88f00195072bb6148af3bc6db723ea26, type: 2}
 --- !u!114 &567568693
 MonoBehaviour:
   m_ObjectHideFlags: 0

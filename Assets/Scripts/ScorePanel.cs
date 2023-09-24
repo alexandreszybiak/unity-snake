@@ -21,12 +21,20 @@ public class ScorePanel : MonoBehaviour
     {
         count = 0;
 
-        if(snake != null) snake.AteFood += OnSnakeAteFood;
+        if (snake != null)
+        {
+            snake.AteFood += OnSnakeAteFood;
+            snake.FinishedGameOverSequence += OnSnakeFinishedGameOverSequence;
+        }
 
     }
     private void OnDestroy()
     {
-        if (snake != null) snake.AteFood -= OnSnakeAteFood;
+        if (snake != null)
+        {
+            snake.AteFood -= OnSnakeAteFood;
+            snake.FinishedGameOverSequence -= OnSnakeFinishedGameOverSequence;
+        }
     }
     void Start()
     {
@@ -49,5 +57,16 @@ public class ScorePanel : MonoBehaviour
     {
         count++;
         SetScore(count);
+    }
+
+    private void OnSnakeFinishedGameOverSequence()
+    {
+        ResetCounter();
+    }
+
+    private void ResetCounter()
+    {
+        SetScore(0);
+        count = 0;
     }
 }

@@ -19,7 +19,7 @@ public class Snake : MonoBehaviour
     Tilemap tilemap;
 
     [SerializeField] //Can it be replaced by a cleaner interface?
-    Tile wallTile, floorTile, foodTile, bodyTile, tailTile, cornerTile, headOpenTile, headClosedTile;
+    Tile wallTile, floorTile, foodTile, bodyTile, brokenBodyTile, tailTile, brokenTailTile, cornerTile, headOpenTile, headClosedTile, headHitWallTile, headKissClosedTile, headKissOpenTile;
 
     private float moveInterval;
     private float lastMoveTime;
@@ -29,18 +29,25 @@ public class Snake : MonoBehaviour
 
     private int chancesLeft;
 
-    private bool headOpen;
+    private Tile currentHeadTile;
+    private Tile currentTailTile;
+    private Tile currentBodyTile;
 
     private List<Vector2Int> parts;
 
     // Events
     public event Action AteFood;
     public event Action ExecutedMove;
+    public event Action FinishedGameOverSequence;
+    public event Action Died;
 
     private void Awake()
     {
         //Init snake body
-        headOpen = false;
+        currentHeadTile = headClosedTile;
+        currentTailTile = tailTile;
+        currentBodyTile = bodyTile;
+
         parts = new List<Vector2Int>();
         for (int i = 0; i > -3; i--)
         {
@@ -80,19 +87,19 @@ public class Snake : MonoBehaviour
         for (int i = 0; i < parts.Count; i++)
         {
             float angle = 0;
-            t = bodyTile;
+            t = currentBodyTile;
             
             if(i < parts.Count - 1) diffWithNext = parts[i] - parts[i + 1];
             if (i > 0) diffWithPrevious = parts[i] - parts[i - 1];
 
             if (i == 0)
             {
-                t = headOpen ? headOpenTile : headClosedTile;
+                t = currentHeadTile;
                 angle = Mathf.Atan2(diffWithNext.y, diffWithNext.x) * (180 / Mathf.PI);
             }
             else if (i == parts.Count - 1)
             {
-                t = tailTile;
+                t = currentTailTile;
                 angle = Mathf.Atan2(diffWithPrevious.y, diffWithPrevious.x) * (180 / Mathf.PI);
                 
             }
@@ -120,11 +127,12 @@ public class Snake : MonoBehaviour
             Matrix4x4 matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(0f, 0f, angle), Vector3.one);
             tilemap.SetTransformMatrix(cellCoord, matrix);
         }
-        headOpen = !headOpen;
     }
 
     void Move(Vector2Int wantedDirection, bool intentional, bool isSavedMove = false)
     {
+        if (!moving) return;
+
         Vector2Int moveDirection = wantedDirection;  
         Vector2Int targetPos = parts[0] + moveDirection;
         bool collideWall = tilemap.GetTile(new Vector3Int(targetPos.x, targetPos.y, 0)) == wallTile;
@@ -146,11 +154,20 @@ public class Snake : MonoBehaviour
 
             if (chancesLeft == 0)
             {
-                tilemap.color = Color.red;
-                SceneManager.LoadScene("Title");
+                currentHeadTile = headHitWallTile;
+                currentBodyTile = brokenBodyTile;
+                currentTailTile = brokenTailTile;
+                Died?.Invoke();
+                //tilemap.color = Color.red;
+                moving = false;
+                GetComponent<PlayerInput>().enabled = false;
+                StartCoroutine(DeleteTail());
+                return;
             }
             lastMoveTime = Time.time;
             chancesLeft--;
+            currentHeadTile = currentHeadTile == headOpenTile ? headKissOpenTile : headKissClosedTile;
+            ExecutedMove?.Invoke();
             return;
         }
 
@@ -185,7 +202,15 @@ public class Snake : MonoBehaviour
         
         chancesLeft = MAX_CHANCES;
 
+        // Change head
+        if (currentHeadTile == headKissOpenTile) currentHeadTile = headOpenTile;
+        else if (currentHeadTile == headKissClosedTile) currentHeadTile = headClosedTile;
+        else currentHeadTile = currentHeadTile == headOpenTile ? headClosedTile : headOpenTile;
+
+        // Message that I finished moving
         if (isSavedMove == false) ExecutedMove?.Invoke();
+
+        
     }
 
     void OnMoveX(InputValue i)
@@ -212,5 +237,23 @@ public class Snake : MonoBehaviour
         if (autoMoveDirection.y != 0) return;
 
         Move(Vector2Int.FloorToInt(new Vector2(0, val)), true);
+    }
+
+    private IEnumerator DeleteTail()
+    {
+        float time = Mathf.Clamp(0.8f / (parts.Count - 4), .04f, .07f);
+        yield return new WaitForSeconds(0.5f);
+        while(parts.Count > 3)
+        {
+            parts.RemoveAt(parts.Count - 1);
+            ExecutedMove?.Invoke();
+            yield return new WaitForSeconds(time);
+        }
+        yield return new WaitForSeconds(0.5f);
+        GetComponent<PlayerInput>().enabled = true;
+        currentHeadTile = headClosedTile;
+        currentBodyTile = bodyTile;
+        currentTailTile = tailTile;
+        FinishedGameOverSequence?.Invoke();
     }
 }
