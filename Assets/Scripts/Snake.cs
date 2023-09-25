@@ -33,7 +33,7 @@ public class Snake : MonoBehaviour
     private Tile currentTailTile;
     private Tile currentBodyTile;
 
-    private List<Vector2Int> parts;
+    public List<Vector2Int> parts;
 
     // Events
     public event Action AteFood;
@@ -154,14 +154,7 @@ public class Snake : MonoBehaviour
 
             if (chancesLeft == 0)
             {
-                currentHeadTile = headHitWallTile;
-                currentBodyTile = brokenBodyTile;
-                currentTailTile = brokenTailTile;
-                Died?.Invoke();
-                //tilemap.color = Color.red;
-                moving = false;
-                GetComponent<PlayerInput>().enabled = false;
-                StartCoroutine(DeleteTail());
+                Die();
                 return;
             }
             lastMoveTime = Time.time;
@@ -255,5 +248,17 @@ public class Snake : MonoBehaviour
         currentBodyTile = bodyTile;
         currentTailTile = tailTile;
         FinishedGameOverSequence?.Invoke();
+    }
+
+    private void Die()
+    {
+        currentHeadTile = headHitWallTile;
+        currentBodyTile = brokenBodyTile;
+        currentTailTile = brokenTailTile;
+        Died?.Invoke();
+        //tilemap.color = Color.red;
+        moving = false;
+        GetComponent<PlayerInput>().enabled = false;
+        StartCoroutine(DeleteTail());
     }
 }

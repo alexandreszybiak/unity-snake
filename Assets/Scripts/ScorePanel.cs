@@ -1,7 +1,5 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using System.Threading;
-using UnityEditor.U2D;
 using UnityEngine;
 
 public class ScorePanel : MonoBehaviour
@@ -17,6 +15,7 @@ public class ScorePanel : MonoBehaviour
 
     private int count;
 
+    public event Action madeNewHighscore;
     private void Awake()
     {
         count = 0;
@@ -25,6 +24,7 @@ public class ScorePanel : MonoBehaviour
         {
             snake.AteFood += OnSnakeAteFood;
             snake.FinishedGameOverSequence += OnSnakeFinishedGameOverSequence;
+            snake.Died += OnSnakeDied;
         }
 
     }
@@ -34,6 +34,7 @@ public class ScorePanel : MonoBehaviour
         {
             snake.AteFood -= OnSnakeAteFood;
             snake.FinishedGameOverSequence -= OnSnakeFinishedGameOverSequence;
+            snake.Died -= OnSnakeDied;
         }
     }
     void Start()
@@ -68,5 +69,14 @@ public class ScorePanel : MonoBehaviour
     {
         SetScore(0);
         count = 0;
+    }
+
+    private void OnSnakeDied()
+    {
+        if (count < PlayerPrefs.GetInt("Score", 0)) return;
+
+        PlayerPrefs.SetInt("Score", count);
+
+        madeNewHighscore?.Invoke();
     }
 }

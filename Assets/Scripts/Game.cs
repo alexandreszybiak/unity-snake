@@ -68,6 +68,28 @@ public class Game : MonoBehaviour
 
         foodPosition = freeTileCoordinates[Random.Range(0, freeTileCoordinates.Count)];        
     }
+
+    private void GenerateFood2()
+    {
+        var freeTileCoordinates = new List<Vector2Int>();
+        for (int x = -5; x < 4; x++)
+        {
+            for (int y = -4; y < 4; y++)
+            {
+                Vector2Int coord = new Vector2Int(x, y);
+                freeTileCoordinates.Add(coord);
+            }
+        }
+        for (int i = 0; i < snake.parts.Count - 1; i++)
+        {
+            freeTileCoordinates.Remove(snake.parts[i]);
+        }
+
+        Vector2Int pos = freeTileCoordinates[Random.Range(0, freeTileCoordinates.Count - 1)];
+        Debug.Log(pos);
+        foodPosition = new Vector3Int(pos.x, pos.y, 1);
+    }
+
     private void ClearLayer(int layer)
     {
         BoundsInt area = new BoundsInt(tilemap.cellBounds.min.x, tilemap.cellBounds.min.y, layer, tilemap.size.x, tilemap.size.y, 1);
@@ -81,7 +103,7 @@ public class Game : MonoBehaviour
 
     private void OnSnakeAteFood()
     {
-        GenerateFood();
+        GenerateFood2();
     }
 
     private void OnSnakeExecutedMove()
