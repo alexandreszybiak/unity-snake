@@ -10,6 +10,8 @@ using UnityEngine.Tilemaps;
 
 public class Snake : MonoBehaviour
 {
+    public bool paused;
+
     const int MAX_CHANCES = 1;
     const float MIN_MOVE_INTERVAL = .1f;
     const float INITIAL_MOVE_INTERVAL = .15f; // .15f
@@ -21,6 +23,7 @@ public class Snake : MonoBehaviour
     [SerializeField] //Can it be replaced by a cleaner interface?
     Tile wallTile, floorTile, foodTile, bodyTile, brokenBodyTile, tailTile, brokenTailTile, cornerTile, headOpenTile, headClosedTile, headHitWallTile, headKissClosedTile, headKissOpenTile;
 
+    private float internalTime;
     private float moveInterval;
     private float lastMoveTime;
     private Vector2Int autoMoveDirection;
@@ -55,8 +58,9 @@ public class Snake : MonoBehaviour
         }
 
         //Init movement
+        internalTime = 0.0f;
         moveInterval = INITIAL_MOVE_INTERVAL;
-        lastMoveTime = Time.time;
+        lastMoveTime = internalTime;
         autoMoveDirection = Vector2Int.right;
         moving = false;
         savedLastIntentionalDirection = Vector2Int.zero;
@@ -72,7 +76,10 @@ public class Snake : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(moving && lastMoveTime + moveInterval < Time.time)
+        if (paused) return;
+
+        internalTime += Time.deltaTime;
+        if(moving && lastMoveTime + moveInterval < internalTime)
         {
             Move(autoMoveDirection, false);
         }
@@ -157,7 +164,7 @@ public class Snake : MonoBehaviour
                 Die();
                 return;
             }
-            lastMoveTime = Time.time;
+            lastMoveTime = internalTime;
             chancesLeft--;
             currentHeadTile = currentHeadTile == headOpenTile ? headKissOpenTile : headKissClosedTile;
             ExecutedMove?.Invoke();
@@ -191,7 +198,7 @@ public class Snake : MonoBehaviour
         // Send message that I ate food
         if (collideFood) AteFood?.Invoke();
 
-        lastMoveTime = Time.time;
+        lastMoveTime = internalTime;
         
         chancesLeft = MAX_CHANCES;
 

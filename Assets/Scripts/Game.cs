@@ -15,6 +15,9 @@ public class Game : MonoBehaviour
     [SerializeField]
     private Snake snake; //USELESS?
 
+    [SerializeField]
+    private GameObject pauseCanvas; //USELESS?
+
     public Vector3Int foodPosition;
 
     private void Awake()
@@ -113,5 +116,20 @@ public class Game : MonoBehaviour
     private void OnSnakeFinishedGameOverSequence()
     {
         UpdateTilemap();
+    }
+
+    private void OnApplicationFocus(bool focus)
+    {
+        if (!focus)
+        {
+            snake.paused = true;
+            pauseCanvas.SetActive(true);
+        }
+    }
+
+    public void ResumeGame()
+    {
+        snake.paused = false;
+        pauseCanvas.SetActive(false);
     }
 }
