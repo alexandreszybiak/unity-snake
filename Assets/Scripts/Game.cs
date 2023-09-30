@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.InputSystem;
 
 public class Game : MonoBehaviour
 {
@@ -16,7 +15,7 @@ public class Game : MonoBehaviour
     private Snake snake; //USELESS?
 
     [SerializeField]
-    private GameObject pauseCanvas; //USELESS?
+    private GameObject pauseCanvas, cam;
 
     public Vector3Int foodPosition;
 
@@ -33,6 +32,7 @@ public class Game : MonoBehaviour
     private void OnSnakeDied()
     {
         UpdateTilemap();
+        StartCoroutine(cam.GetComponent<CameraShake>().Shake());
     }
 
     private void OnDestroy()
