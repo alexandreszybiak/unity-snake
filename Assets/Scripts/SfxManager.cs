@@ -7,7 +7,7 @@ public class SfxManager : MonoBehaviour
     AudioSource audioSource;
 
     [SerializeField]
-    AudioClip snakeReadySfx, eatFruitSfx, crashSfx, loosePartSfx, changeDirectionSfx, enterPauseSfx, exitPauseSfx;
+    AudioClip snakeReadySfx, eatFruitSfx, crashSfx, loosePartSfx, changeDirectionSfx, enterPauseSfx, exitPauseSfx, autoMoveSfx;
 
     void Awake()
     {
@@ -54,5 +54,15 @@ public class SfxManager : MonoBehaviour
     public void OnExitPause()
     {
         audioSource.PlayOneShot(exitPauseSfx);
+    }
+
+    public void OnSnakeAutoMove()
+    {
+        //audioSource.PlayOneShot(autoMoveSfx, 0.05f);
+    }
+
+    public void SetMute(bool mute)
+    {
+        audioSource.mute = !mute;
     }
 }

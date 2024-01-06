@@ -47,6 +47,7 @@ public class Snake : MonoBehaviour
     public event Action LoosePart;
     public event Action ChangeDirection;
     public event Action GotControl;
+    public event Action AutoMoved;
 
     private void Awake()
     {
@@ -82,6 +83,7 @@ public class Snake : MonoBehaviour
         LoosePart += sfxManager.OnSnakeLoosePart;
         ChangeDirection += sfxManager.OnSnakeChangeDirection;
         GotControl += sfxManager.OnSnakeGotControl;
+        AutoMoved += sfxManager.OnSnakeAutoMove;
     }
     void Start()
     {
@@ -99,6 +101,7 @@ public class Snake : MonoBehaviour
         LoosePart -= sfxManager.OnSnakeLoosePart;
         ChangeDirection -= sfxManager.OnSnakeChangeDirection;
         GotControl -= sfxManager.OnSnakeGotControl;
+        AutoMoved -= sfxManager.OnSnakeAutoMove;
     }
 
     // Update is called once per frame
@@ -218,6 +221,10 @@ public class Snake : MonoBehaviour
         {
             ChangeDirection?.Invoke();
             savedLastIntentionalDirection = Vector2Int.zero;
+        }
+        else
+        {
+            AutoMoved?.Invoke();
         }
         if (savedLastIntentionalDirection != Vector2Int.zero)
         {

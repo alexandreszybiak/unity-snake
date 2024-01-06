@@ -17,7 +17,9 @@ public class Game : MonoBehaviour
     private Snake snake; //USELESS?
 
     [SerializeField]
-    private GameObject pauseCanvas, cam;
+    private GameObject pauseCanvas;
+
+    private Camera cam;
 
     public Vector3Int foodPosition;
 
@@ -26,6 +28,9 @@ public class Game : MonoBehaviour
 
     private void Awake()
     {
+        // Find camera
+        cam = FindAnyObjectByType<Camera>();
+
         // Register to event
         snake.AteFood += OnSnakeAteFood;
         snake.ExecutedMove += OnSnakeExecutedMove;
@@ -45,7 +50,7 @@ public class Game : MonoBehaviour
     private void OnSnakeDied()
     {
         UpdateTilemap();
-        StartCoroutine(cam.GetComponent<CameraShake>().Shake());
+        //StartCoroutine(cam.GetComponent<CameraShake>().Shake());
     }
 
     private void OnDestroy()
