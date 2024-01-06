@@ -48,6 +48,7 @@ public class Snake : MonoBehaviour
     public event Action ChangeDirection;
     public event Action GotControl;
     public event Action AutoMoved;
+    public event Action StartPlaying;
 
     private void Awake()
     {
@@ -84,6 +85,14 @@ public class Snake : MonoBehaviour
         ChangeDirection += sfxManager.OnSnakeChangeDirection;
         GotControl += sfxManager.OnSnakeGotControl;
         AutoMoved += sfxManager.OnSnakeAutoMove;
+
+        // Music
+        MusicManager musicManager = FindAnyObjectByType<MusicManager>();
+
+        if (musicManager == null) return;
+
+        StartPlaying += musicManager.OnGameStart;
+        Died += musicManager.OnGameStop;
     }
     void Start()
     {
@@ -102,6 +111,14 @@ public class Snake : MonoBehaviour
         ChangeDirection -= sfxManager.OnSnakeChangeDirection;
         GotControl -= sfxManager.OnSnakeGotControl;
         AutoMoved -= sfxManager.OnSnakeAutoMove;
+
+        // Music
+        MusicManager musicManager = FindAnyObjectByType<MusicManager>();
+
+        if (musicManager == null) return;
+
+        StartPlaying -= musicManager.OnGameStart;
+        Died -= musicManager.OnGameStop;
     }
 
     // Update is called once per frame
@@ -252,7 +269,11 @@ public class Snake : MonoBehaviour
 
     void OnMoveX(InputValue i)
     {
-        if (moving == false) moving = true;
+        if (moving == false)
+        {
+            StartPlaying?.Invoke();
+            moving = true;
+        }
 
         var val = i.Get<float>();
 
@@ -265,7 +286,11 @@ public class Snake : MonoBehaviour
 
     void OnMoveY(InputValue i)
     {
-        if (moving == false) moving = true;
+        if (moving == false)
+        {
+            StartPlaying?.Invoke();
+            moving = true;
+        }
 
         var val = i.Get<float>();
 
