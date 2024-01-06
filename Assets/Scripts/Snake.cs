@@ -223,7 +223,6 @@ public class Snake : MonoBehaviour
         {
             Move(savedLastIntentionalDirection, true, true);
             savedLastIntentionalDirection = Vector2Int.zero;
-            Debug.Log("Execute saved move");
         }
 
         // Send message that I ate food
@@ -286,6 +285,7 @@ public class Snake : MonoBehaviour
         currentHeadTile = headClosedTile;
         currentBodyTile = bodyTile;
         currentTailTile = tailTile;
+        moveInterval = INITIAL_MOVE_INTERVAL;
         FinishedGameOverSequence?.Invoke();
         GotControl?.Invoke();
     }

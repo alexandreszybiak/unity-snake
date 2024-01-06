@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -19,6 +21,9 @@ public class Game : MonoBehaviour
 
     public Vector3Int foodPosition;
 
+    public event Action EnterPause;
+    public event Action ExitPause;
+
     private void Awake()
     {
         // Register to event
@@ -27,6 +32,14 @@ public class Game : MonoBehaviour
         snake.Died += OnSnakeDied;
         snake.FinishedGameOverSequence += OnSnakeFinishedGameOverSequence;
         foodPosition = new Vector3Int(1, -2, 1);
+
+        // Sound
+        SfxManager sfxManager = FindAnyObjectByType<SfxManager>();
+
+        if (sfxManager == null) return;
+
+        EnterPause += sfxManager.OnEnterPause;
+        ExitPause += sfxManager.OnExitPause;
     }
 
     private void OnSnakeDied()
@@ -41,6 +54,14 @@ public class Game : MonoBehaviour
         snake.ExecutedMove -= OnSnakeExecutedMove;
         snake.Died -= OnSnakeDied;
         snake.FinishedGameOverSequence -= OnSnakeFinishedGameOverSequence;
+
+        // Sound
+        SfxManager sfxManager = FindAnyObjectByType<SfxManager>();
+
+        if (sfxManager == null) return;
+
+        EnterPause -= sfxManager.OnEnterPause;
+        ExitPause -= sfxManager.OnExitPause;
     }
     void Start()
     {
@@ -69,7 +90,7 @@ public class Game : MonoBehaviour
             }
         }
 
-        foodPosition = freeTileCoordinates[Random.Range(0, freeTileCoordinates.Count)];        
+        foodPosition = freeTileCoordinates[UnityEngine.Random.Range(0, freeTileCoordinates.Count)];        
     }
 
     private void GenerateFood2()
@@ -88,8 +109,7 @@ public class Game : MonoBehaviour
             freeTileCoordinates.Remove(snake.parts[i]);
         }
 
-        Vector2Int pos = freeTileCoordinates[Random.Range(0, freeTileCoordinates.Count - 1)];
-        Debug.Log(pos);
+        Vector2Int pos = freeTileCoordinates[UnityEngine.Random.Range(0, freeTileCoordinates.Count - 1)];
         foodPosition = new Vector3Int(pos.x, pos.y, 1);
     }
 
@@ -124,6 +144,7 @@ public class Game : MonoBehaviour
         {
             snake.paused = true;
             pauseCanvas.SetActive(true);
+            EnterPause?.Invoke();
         }
     }
 
@@ -131,5 +152,6 @@ public class Game : MonoBehaviour
     {
         snake.paused = false;
         pauseCanvas.SetActive(false);
+        ExitPause?.Invoke();
     }
 }

@@ -7,10 +7,7 @@ public class SfxManager : MonoBehaviour
     AudioSource audioSource;
 
     [SerializeField]
-    AudioClip snakeReadySfx, eatFruitSfx, crashSfx, loosePartSfx, changeDirectionSfx;
-
-    [SerializeField]
-    private Snake snake; //USELESS?
+    AudioClip snakeReadySfx, eatFruitSfx, crashSfx, loosePartSfx, changeDirectionSfx, enterPauseSfx, exitPauseSfx;
 
     void Awake()
     {
@@ -47,5 +44,15 @@ public class SfxManager : MonoBehaviour
     public void OnSnakeGotControl()
     {
         audioSource.PlayOneShot(snakeReadySfx);
+    }
+
+    public void OnEnterPause()
+    {
+        audioSource.PlayOneShot(enterPauseSfx);
+    }
+
+    public void OnExitPause()
+    {
+        audioSource.PlayOneShot(exitPauseSfx);
     }
 }

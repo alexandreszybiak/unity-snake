@@ -3003,7 +3003,8 @@ MonoBehaviour:
   crashSfx: {fileID: 8300000, guid: a3e3cfc2e238b0b49875550d87642f33, type: 3}
   loosePartSfx: {fileID: 8300000, guid: 0454c5c925d4aa740b99f4908fdc59cb, type: 3}
   changeDirectionSfx: {fileID: 8300000, guid: 99ac985e181dc9849ad18177c7e31330, type: 3}
-  snake: {fileID: 0}
+  enterPauseSfx: {fileID: 8300000, guid: 629646dca524c654b888a292f3e22a68, type: 3}
+  exitPauseSfx: {fileID: 8300000, guid: a0d00b361b26b2f45a627b6b5db3d023, type: 3}
 --- !u!1 &2107586581
 GameObject:
   m_ObjectHideFlags: 0
