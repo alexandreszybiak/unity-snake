@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -43,6 +44,9 @@ public class Snake : MonoBehaviour
     public event Action ExecutedMove;
     public event Action FinishedGameOverSequence;
     public event Action Died;
+    public event Action LoosePart;
+    public event Action ChangeDirection;
+    public event Action GotControl;
 
     private void Awake()
     {
@@ -67,10 +71,34 @@ public class Snake : MonoBehaviour
 
         //
         chancesLeft = MAX_CHANCES;
+
+        // Sound
+        SfxManager sfxManager = FindAnyObjectByType<SfxManager>();
+
+        if (sfxManager == null) return;
+
+        AteFood += sfxManager.OnSnakeAteFood;
+        Died += sfxManager.OnSnakeDied;
+        LoosePart += sfxManager.OnSnakeLoosePart;
+        ChangeDirection += sfxManager.OnSnakeChangeDirection;
+        GotControl += sfxManager.OnSnakeGotControl;
     }
     void Start()
     {
-        
+        GotControl?.Invoke();
+    }
+
+    private void OnDestroy()
+    {
+        SfxManager sfxManager = FindAnyObjectByType<SfxManager>();
+
+        if (sfxManager == null) return;
+
+        AteFood -= sfxManager.OnSnakeAteFood;
+        Died -= sfxManager.OnSnakeDied;
+        LoosePart -= sfxManager.OnSnakeLoosePart;
+        ChangeDirection -= sfxManager.OnSnakeChangeDirection;
+        GotControl -= sfxManager.OnSnakeGotControl;
     }
 
     // Update is called once per frame
@@ -153,7 +181,6 @@ public class Snake : MonoBehaviour
             {
                 if (isSavedMove == false)
                 {
-                    Debug.Log("Saved move");
                     savedLastIntentionalDirection = wantedDirection;
                 }
                 return;
@@ -187,7 +214,11 @@ public class Snake : MonoBehaviour
         autoMoveDirection = moveDirection;
 
         // Saved move
-        if (intentional) savedLastIntentionalDirection = Vector2Int.zero;
+        if (intentional)
+        {
+            ChangeDirection?.Invoke();
+            savedLastIntentionalDirection = Vector2Int.zero;
+        }
         if (savedLastIntentionalDirection != Vector2Int.zero)
         {
             Move(savedLastIntentionalDirection, true, true);
@@ -247,6 +278,7 @@ public class Snake : MonoBehaviour
         {
             parts.RemoveAt(parts.Count - 1);
             ExecutedMove?.Invoke();
+            LoosePart?.Invoke();
             yield return new WaitForSeconds(time);
         }
         yield return new WaitForSeconds(0.5f);
@@ -255,6 +287,7 @@ public class Snake : MonoBehaviour
         currentBodyTile = bodyTile;
         currentTailTile = tailTile;
         FinishedGameOverSequence?.Invoke();
+        GotControl?.Invoke();
     }
 
     private void Die()
