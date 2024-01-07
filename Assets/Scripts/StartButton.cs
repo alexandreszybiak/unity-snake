@@ -5,10 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class StartButton : MonoBehaviour
 {
-    AudioSource audioSource;
+    [SerializeField]
+    GameObject gameManager, snake, scorePanel, title;
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        
     }
 
     // Update is called once per frame
@@ -19,6 +20,11 @@ public class StartButton : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("Game");
+        gameManager.SetActive(true);
+        snake.SetActive(true);
+        scorePanel.SetActive(true);
+
+        title.SetActive(false);
+        transform.parent.gameObject.SetActive(false);
     }
 }

@@ -28,4 +28,13 @@ public class MusicManager : MonoBehaviour
     {
         audioSource.Stop();
     }
+    public void OnEnterPause()
+    {
+        audioSource.Pause();
+    }
+
+    public void OnExitPause()
+    {
+        audioSource.UnPause();
+    }
 }

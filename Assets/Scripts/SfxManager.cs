@@ -11,7 +11,6 @@ public class SfxManager : MonoBehaviour
 
     void Awake()
     {
-        DontDestroyOnLoad(transform.gameObject);
         audioSource = GetComponent<AudioSource>();
     }
 

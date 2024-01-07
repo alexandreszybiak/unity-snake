@@ -19,6 +19,7 @@ public class Game : MonoBehaviour
     [SerializeField]
     private GameObject pauseCanvas;
 
+    [SerializeField]
     private Camera cam;
 
     public Vector3Int foodPosition;
@@ -28,9 +29,6 @@ public class Game : MonoBehaviour
 
     private void Awake()
     {
-        // Find camera
-        cam = FindAnyObjectByType<Camera>();
-
         // Register to event
         snake.AteFood += OnSnakeAteFood;
         snake.ExecutedMove += OnSnakeExecutedMove;
@@ -45,12 +43,20 @@ public class Game : MonoBehaviour
 
         EnterPause += sfxManager.OnEnterPause;
         ExitPause += sfxManager.OnExitPause;
+
+        // Music
+        MusicManager musicManager = FindAnyObjectByType<MusicManager>();
+
+        if (musicManager == null) return;
+
+        EnterPause += musicManager.OnEnterPause;
+        ExitPause += musicManager.OnExitPause;
     }
 
     private void OnSnakeDied()
     {
         UpdateTilemap();
-        //StartCoroutine(cam.GetComponent<CameraShake>().Shake());
+        StartCoroutine(cam.GetComponent<CameraShake>().Shake());
     }
 
     private void OnDestroy()
@@ -67,6 +73,14 @@ public class Game : MonoBehaviour
 
         EnterPause -= sfxManager.OnEnterPause;
         ExitPause -= sfxManager.OnExitPause;
+
+        // Music
+        MusicManager musicManager = FindAnyObjectByType<MusicManager>();
+
+        if (musicManager == null) return;
+
+        EnterPause -= musicManager.OnEnterPause;
+        ExitPause -= musicManager.OnExitPause;
     }
     void Start()
     {
