@@ -32,7 +32,7 @@ public class SfxManager : MonoBehaviour
 
     public void OnSnakeLoosePart()
     {
-        audioSource.PlayOneShot(loosePartSfx);
+        audioSource.PlayOneShot(loosePartSfx, 0.5f);
     }
 
     public void OnSnakeChangeDirection()

@@ -4021,9 +4021,9 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
-  m_Pitch: 0.75
+  m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -4121,7 +4121,7 @@ MonoBehaviour:
   snakeReadySfx: {fileID: 8300000, guid: 9e160afcea508554a8e86c633b8a1d54, type: 3}
   eatFruitSfx: {fileID: 8300000, guid: 4a1e12cdf98689844a98ab62c7b01be3, type: 3}
   crashSfx: {fileID: 8300000, guid: a3e3cfc2e238b0b49875550d87642f33, type: 3}
-  loosePartSfx: {fileID: 8300000, guid: 0454c5c925d4aa740b99f4908fdc59cb, type: 3}
+  loosePartSfx: {fileID: 8300000, guid: 7be027f2c6bcadb44a74e88d72e015a4, type: 3}
   changeDirectionSfx: {fileID: 8300000, guid: 7be027f2c6bcadb44a74e88d72e015a4, type: 3}
   enterPauseSfx: {fileID: 8300000, guid: 629646dca524c654b888a292f3e22a68, type: 3}
   exitPauseSfx: {fileID: 8300000, guid: a0d00b361b26b2f45a627b6b5db3d023, type: 3}
