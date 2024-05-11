@@ -2496,7 +2496,7 @@ MonoBehaviour:
   - {fileID: -107721905, guid: 19e465612bda9904383aa1eedad47768, type: 3}
   - {fileID: -1043073040, guid: 19e465612bda9904383aa1eedad47768, type: 3}
   - {fileID: -106975008, guid: 19e465612bda9904383aa1eedad47768, type: 3}
-  scorePanel: {fileID: 0}
+  scorePanel: {fileID: 633008906}
 --- !u!212 &695979180
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4119,10 +4119,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   snakeReadySfx: {fileID: 8300000, guid: 9e160afcea508554a8e86c633b8a1d54, type: 3}
-  eatFruitSfx: {fileID: 8300000, guid: 4a1e12cdf98689844a98ab62c7b01be3, type: 3}
+  eatFruitSfx: {fileID: 8300000, guid: ca3fd8ad488cf3a4eab97c1d5bf8ab7a, type: 3}
   crashSfx: {fileID: 8300000, guid: a3e3cfc2e238b0b49875550d87642f33, type: 3}
   loosePartSfx: {fileID: 8300000, guid: 7be027f2c6bcadb44a74e88d72e015a4, type: 3}
-  changeDirectionSfx: {fileID: 8300000, guid: 7be027f2c6bcadb44a74e88d72e015a4, type: 3}
+  changeDirectionSfx: {fileID: 8300000, guid: 048c88fc9f23dd64cb7ec0fb02724862, type: 3}
   enterPauseSfx: {fileID: 8300000, guid: 629646dca524c654b888a292f3e22a68, type: 3}
   exitPauseSfx: {fileID: 8300000, guid: a0d00b361b26b2f45a627b6b5db3d023, type: 3}
   autoMoveSfx: {fileID: 0}

@@ -22,7 +22,7 @@ public class SfxManager : MonoBehaviour
 
     public void OnSnakeAteFood()
     {
-        audioSource.PlayOneShot(eatFruitSfx);
+        audioSource.PlayOneShot(eatFruitSfx, 1.0f);
     }
 
     public void OnSnakeDied()
@@ -37,7 +37,7 @@ public class SfxManager : MonoBehaviour
 
     public void OnSnakeChangeDirection()
     {
-        audioSource.PlayOneShot(changeDirectionSfx, 0.25f);
+        audioSource.PlayOneShot(changeDirectionSfx, 0.50f);
     }
 
     public void OnSnakeGotControl()

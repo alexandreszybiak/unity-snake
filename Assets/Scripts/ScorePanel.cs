@@ -42,12 +42,6 @@ public class ScorePanel : MonoBehaviour
         SetScore(0);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void SetScore(int value = 0)
     {
         counterTens.GetComponent<SpriteRenderer>().sprite = numberFont[value / 10];
@@ -73,7 +67,7 @@ public class ScorePanel : MonoBehaviour
 
     private void OnSnakeDied()
     {
-        if (count < PlayerPrefs.GetInt("Score", 0)) return;
+        if (count < PlayerPrefs.GetInt("Score", 10)) return;
 
         PlayerPrefs.SetInt("Score", count);
 

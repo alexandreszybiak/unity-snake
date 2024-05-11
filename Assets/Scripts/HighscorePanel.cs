@@ -31,7 +31,7 @@ public class HighscorePanel : MonoBehaviour
     }
     void Start()
     {
-        SetValue(PlayerPrefs.GetInt("Score", 9));
+        SetValue(PlayerPrefs.GetInt("Score", 10));
     }
 
     // Update is called once per frame
