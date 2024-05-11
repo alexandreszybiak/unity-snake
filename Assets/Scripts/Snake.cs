@@ -14,7 +14,7 @@ public class Snake : MonoBehaviour
     public bool paused;
 
     const int MAX_CHANCES = 1;
-    const float MIN_MOVE_INTERVAL = .1f;
+    const float MIN_MOVE_INTERVAL = .125f;
     const float INITIAL_MOVE_INTERVAL = .15f; // .15f
     const float ACCELERATION_INCREMENT = .015f; //.015f
 

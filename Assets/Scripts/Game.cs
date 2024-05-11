@@ -107,6 +107,12 @@ public class Game : MonoBehaviour
                 
                 if (t0 == floorTile && t1 == null) freeTileCoordinates.Add(coord1);
             }
+            for (int i = 0; i < snake.parts.Count - 1; i++)
+            {
+                int snakeX = snake.parts[i].x;
+                int snakeY = snake.parts[i].y;
+                freeTileCoordinates.Remove(new Vector3Int(snakeX, snakeY, 0));
+            }
         }
 
         foodPosition = freeTileCoordinates[UnityEngine.Random.Range(0, freeTileCoordinates.Count)];        
@@ -145,7 +151,7 @@ public class Game : MonoBehaviour
 
     private void OnSnakeAteFood()
     {
-        GenerateFood2();
+        GenerateFood();
     }
 
     private void OnSnakeExecutedMove()

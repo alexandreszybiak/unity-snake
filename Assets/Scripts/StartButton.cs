@@ -22,7 +22,7 @@ public class StartButton : MonoBehaviour
     {
         gameManager.SetActive(true);
         snake.SetActive(true);
-        scorePanel.SetActive(true);
+        //scorePanel.SetActive(true);
 
         title.SetActive(false);
         transform.parent.gameObject.SetActive(false);
