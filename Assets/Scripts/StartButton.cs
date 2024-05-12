@@ -24,7 +24,7 @@ public class StartButton : MonoBehaviour
         snake.SetActive(true);
         //scorePanel.SetActive(true);
 
-        title.SetActive(false);
+        //title.SetActive(false);
         transform.parent.gameObject.SetActive(false);
     }
 }

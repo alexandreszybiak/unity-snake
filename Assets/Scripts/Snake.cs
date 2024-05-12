@@ -49,6 +49,7 @@ public class Snake : MonoBehaviour
     public event Action GotControl;
     public event Action AutoMoved;
     public event Action StartPlaying;
+    public event Action Created;
 
     private void Awake()
     {
@@ -62,6 +63,7 @@ public class Snake : MonoBehaviour
         {
             parts.Add(new Vector2Int(i, -2));
         }
+        Created?.Invoke();
 
         //Init movement
         internalTime = 0.0f;
